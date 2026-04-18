@@ -2,6 +2,8 @@
 node_modules
 /dist
 
+# /docs is built output for GitHub Pages (branch deploy); commit it after `npm run build:pages`.
+
 
 # local env files
 .env.local

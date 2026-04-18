@@ -2,30 +2,25 @@
 
 Personal portfolio (Vue 3). Ships as a static site suitable for GitHub Pages.
 
-## GitHub Pages
+## GitHub Pages (deploy from branch, no Actions)
 
-GitHub must serve the **built** site (`dist/` after `npm run build`), not the Vue source at the repo root. Otherwise you only see the README or a broken page.
+GitHub Pages must serve **built** files. This project builds into **`docs/`** so you can keep source at the repo root and use **Settings → Pages → Deploy from a branch → `main` → `/docs`**.
 
-### Recommended: GitHub Actions (this repo includes a workflow)
+1. In [`package.json`](package.json), set **`homepage`** to your real site URL (and optionally **`repository.url`** to the same GitHub repo). Examples:
+   - Project site: `https://YOUR_USERNAME.github.io/YOUR_REPO/`
+   - User site (repo `YOUR_USERNAME.github.io`): `https://YOUR_USERNAME.github.io/`
+2. Build the Pages folder:
+   ```bash
+   npm run build:pages
+   ```
+3. Commit and push the generated **`docs/`** directory (including `.nojekyll` from `public/`).
+4. On GitHub: **Settings → Pages** → **Deploy from a branch** → Branch **`main`**, folder **`/docs`**, Save.
 
-1. Push this repo to GitHub (workflow file: [`.github/workflows/deploy-github-pages.yml`](.github/workflows/deploy-github-pages.yml)).
-2. On GitHub: **Settings → Pages → Build and deployment**.
-3. Under **Source**, choose **GitHub Actions** (not “Deploy from a branch”).
-4. After the first run on `main`, open the workflow run and confirm **deploy** succeeded; the site URL is shown on the run summary and under Pages settings.
+Whenever you change the app, run **`npm run build:pages`** again, commit the updated `docs/`, and push.
 
-[`vue.config.js`](vue.config.js) sets `publicPath` automatically in CI from `GITHUB_REPOSITORY`:
+**Asset path:** [`vue.config.js`](vue.config.js) sets production `publicPath` from `PAGE_PUBLIC_PATH`, or from `homepage`, or from the repo name in `repository.url`. Wrong `publicPath` causes a blank page or missing JS/CSS.
 
-- Repo **`yourname.github.io`** → assets load from site root (`/`).
-- Any other repo name → assets load from **`/that-repo-name/`** (project page).
-
-**Local production build** (e.g. to test a project URL):  
-`GITHUB_REPOSITORY=yourname/your-repo npm run build`
-
-### If you insist on “Deploy from a branch”
-
-1. Run `npm run build` locally with the correct `GITHUB_REPOSITORY` as above (or temporarily hard‑code `publicPath` in `vue.config.js`).
-2. Copy **everything inside** `dist/` into the folder GitHub Pages serves (`/` on `main`, or `/docs`, or the root of `gh-pages`).
-3. Commit and push those static files. Keeping only source on `main` without a workflow will not publish the app.
+**Optional:** `PAGE_PUBLIC_PATH=/my-repo/ npm run build:pages` overrides the above for a one-off build.
 
 ## Portrait
 
