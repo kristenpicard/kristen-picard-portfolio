@@ -4,6 +4,14 @@
  */
 export const projects = [
   {
+    title: 'Half Marathon Training Planner',
+    description:
+      'Client-side training plan generator and week-by-week tracker—profile inputs, volume rules, taper, and Chart.js visuals. Data stays in the browser.',
+    tags: ['JavaScript', 'Chart.js', 'HTML/CSS'],
+    demoUrl: 'https://kristenpicard.github.io/half-marathon-planner/',
+    repoUrl: 'https://github.com/kristenpicard/half-marathon-planner',
+  },
+  {
     title: 'My Media Mate',
     description:
       'Full-stack media review app with MVC structure, MySQL and Sequelize ORM, and Handlebars templating.',

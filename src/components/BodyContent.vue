@@ -751,7 +751,7 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
-/* Full-width / large screens: stay 3×2 (six projects), wider gutters only */
+/* Full-width / large screens: three columns, wider gutters only */
 @media (min-width: 80rem) {
   .project-grid {
     gap: clamp(1.25rem, 1.6vw, 1.75rem);
