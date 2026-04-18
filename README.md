@@ -1,4 +1,4 @@
-# kristen-portfolio
+# vue-portfolio
 
 Personal portfolio (Vue 3). Ships as a static site suitable for GitHub Pages.
 
@@ -6,9 +6,7 @@ Personal portfolio (Vue 3). Ships as a static site suitable for GitHub Pages.
 
 GitHub Pages must serve **built** files. This project builds into **`docs/`** so you can keep source at the repo root and use **Settings → Pages → Deploy from a branch → `main` → `/docs`**.
 
-1. In [`package.json`](package.json), set **`homepage`** to your real site URL (and optionally **`repository.url`** to the same GitHub repo). Examples:
-   - Project site: `https://YOUR_USERNAME.github.io/YOUR_REPO/`
-   - User site (repo `YOUR_USERNAME.github.io`): `https://YOUR_USERNAME.github.io/`
+1. In [`package.json`](package.json), set **`homepage`** (optional metadata) to your site URL if you like; it is **not** required for asset paths anymore.
 2. Build the Pages folder:
    ```bash
    npm run build:pages
@@ -18,9 +16,15 @@ GitHub Pages must serve **built** files. This project builds into **`docs/`** so
 
 Whenever you change the app, run **`npm run build:pages`** again, commit the updated `docs/`, and push.
 
-**Asset path:** [`vue.config.js`](vue.config.js) sets production `publicPath` from `PAGE_PUBLIC_PATH`, or from `homepage`, or from the repo name in `repository.url`. Wrong `publicPath` causes a blank page or missing JS/CSS.
+**Asset path:** Production builds use a **relative** `publicPath` (`./`) so script and CSS URLs resolve correctly on `https://<user>.github.io/<repo>/` without depending on the repo name. If you ever need absolute paths:  
+`PAGE_ABSOLUTE_PATH=/vue-portfolio/ npm run build:pages`
 
-**Optional:** `PAGE_PUBLIC_PATH=/my-repo/ npm run build:pages` overrides the above for a one-off build.
+### “View site” opens but the page is blank
+
+That usually means **`index.html` loaded but `*.js` returned 404** (open DevTools → Network, reload). Common causes:
+
+- **Pages is not using `/docs`.** If the source is **`/` (root)** on `main`, GitHub serves the repo root (README, `package.json`) — not the built files inside `docs/`. Fix: **Settings → Pages → Branch `main`, folder `/docs`**, Save, wait a minute, hard-refresh.
+- **`docs/` on GitHub is out of date.** Run `npm run build:pages`, commit **all** files under `docs/` (including `js/`, `css/`, `img/`, `.nojekyll`), push, wait for Pages to rebuild.
 
 ## Portrait
 

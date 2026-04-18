@@ -2,10 +2,10 @@
   "name": "kristen-portfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://kristenpicard.github.io/kristen-portfolio/",
+  "homepage": "https://kristenpicard.github.io/vue-portfolio/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kristenpicard/kristen-portfolio.git"
+    "url": "https://github.com/kristenpicard/vue-portfolio.git"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
