@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 136" width="88" height="136">
+  <defs>
+    <linearGradient id="g" x1="25%" y1="100%" x2="75%" y2="4%">
+      <stop offset="0%" stop-color="#1e2418" />
+      <stop offset="50%" stop-color="#5d6e42" />
+      <stop offset="100%" stop-color="#d0e0b0" />
+    </linearGradient>
+  </defs>
+  <!-- Lanceolate: narrower than a symmetric oval -->
+  <path
+    fill="url(#g)"
+    d="M 44 8
+      C 58 14 62 42 60 72
+      C 58 102 52 118 44 126
+      C 36 118 30 102 28 72
+      C 26 42 30 14 44 8 Z"
+    opacity="0.9"
+  />
+</svg>
