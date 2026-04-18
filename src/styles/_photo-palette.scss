@@ -1,17 +1,16 @@
-// Palette from src/assets/portrait.png — deep edge foliage (#231e12 / #272213), warm film grade,
-// lifted to readable sage accents and cream text.
+// Palette — deep edge foliage, warm film grade; sage accents nudged slightly toward olive.
 
-$accent: #8fb86e;
-$accent-dim: rgba(143, 184, 110, 0.92);
-$accent-line-soft: rgba(143, 184, 110, 0.15);
-$accent-border: rgba(143, 184, 110, 0.28);
-$accent-border-strong: rgba(143, 184, 110, 0.55);
-$accent-fill: rgba(143, 184, 110, 0.12);
-$accent-shadow-strong: rgba(143, 184, 110, 0.45);
-$accent-line: rgba(143, 184, 110, 0.4);
-$accent-underline: rgba(200, 220, 175, 0.55);
-$accent-ring: rgba(143, 184, 110, 0.08);
-$accent-card-border: rgba(143, 184, 110, 0.22);
+$accent: #8a9a66;
+$accent-dim: rgba(138, 154, 102, 0.92);
+$accent-line-soft: rgba(138, 154, 102, 0.15);
+$accent-border: rgba(138, 154, 102, 0.28);
+$accent-border-strong: rgba(138, 154, 102, 0.55);
+$accent-fill: rgba(138, 154, 102, 0.12);
+$accent-shadow-strong: rgba(138, 154, 102, 0.45);
+$accent-line: rgba(138, 154, 102, 0.4);
+$accent-underline: rgba(192, 210, 165, 0.55);
+$accent-ring: rgba(138, 154, 102, 0.08);
+$accent-card-border: rgba(138, 154, 102, 0.22);
 
 $text-cream: #f4efe6;
 $muted: rgba(237, 228, 214, 0.78);
@@ -21,10 +20,10 @@ $surface: rgba(255, 252, 245, 0.045);
 $surface-hover: rgba(255, 252, 245, 0.085);
 $surface-border: rgba(210, 200, 180, 0.12);
 
-// App shell (greens-first)
-$grad-hero: rgba(74, 98, 58, 0.42);
-$grad-side: rgba(45, 58, 38, 0.55);
-$grad-floor: rgba(32, 42, 28, 0.6);
-$grad-base-top: #1e2718;
-$grad-base-mid: #161c12;
-$grad-base-bottom: #0f120d;
+// App shell (greens-first, slightly olive)
+$grad-hero: rgba(72, 94, 56, 0.42);
+$grad-side: rgba(44, 56, 36, 0.55);
+$grad-floor: rgba(32, 40, 26, 0.6);
+$grad-base-top: #1e2616;
+$grad-base-mid: #161a10;
+$grad-base-bottom: #0f110c;

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" width="120" height="140">
+  <defs>
+    <linearGradient id="g" x1="15%" y1="95%" x2="85%" y2="8%">
+      <stop offset="0%" stop-color="#2a2214" />
+      <stop offset="45%" stop-color="#8a8238" />
+      <stop offset="100%" stop-color="#f0e090" />
+    </linearGradient>
+  </defs>
+  <!-- Palmate silhouette: one top apex, side lobes + lower sinuses (avoids symmetric “heart” dome) -->
+  <path
+    fill="url(#g)"
+    d="M 60 5
+      L 79 26 L 99 38 L 90 60 L 102 82 L 83 98 L 71 108
+      L 60 118 L 49 108 L 37 98 L 18 82 L 30 60 L 21 38 L 41 26 Z"
+    opacity="0.94"
+  />
+</svg>

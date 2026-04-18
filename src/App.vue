@@ -1,12 +1,16 @@
 <template>
   <div class="ambient" aria-hidden="true" />
+  <div v-if="leafParticlesOn" class="folio-leaf-particles" aria-hidden="true">
+    <vue-particles id="folio-leaf-particles" :options="leafParticleOptions" />
+  </div>
   <BodyContent />
   <div class="custom-cursor" ref="cursorRef" aria-hidden="true" />
 </template>
 
 <script>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import BodyContent from './components/BodyContent.vue';
+import { createFallingLeafParticlesOptions } from './fallingLeafParticlesOptions.js';
 
 export default {
   name: 'App',
@@ -15,6 +19,11 @@ export default {
   },
   setup() {
     const cursorRef = ref(null);
+    const leafParticlesOn = ref(false);
+
+    const leafParticleOptions = computed(() =>
+      createFallingLeafParticlesOptions(process.env.BASE_URL || '/')
+    );
 
     const onMove = (e) => {
       const el = cursorRef.value;
@@ -29,6 +38,14 @@ export default {
     };
 
     onMounted(() => {
+      if (
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
+        return;
+      }
+      leafParticlesOn.value = true;
+
       const finePointer =
         typeof window !== 'undefined' &&
         window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -41,7 +58,7 @@ export default {
       window.removeEventListener('mousemove', onMove);
     });
 
-    return { cursorRef };
+    return { cursorRef, leafParticlesOn, leafParticleOptions };
   },
 };
 </script>
@@ -102,8 +119,8 @@ html {
   top: 10%;
   background: radial-gradient(
     circle,
-    rgba(120, 165, 88, 0.26) 0%,
-    rgba(55, 72, 42, 0.1) 48%,
+    rgba(116, 158, 82, 0.26) 0%,
+    rgba(54, 70, 40, 0.1) 48%,
     transparent 72%
   );
   animation-delay: -4s;
@@ -115,7 +132,7 @@ html {
   background: radial-gradient(
     circle,
     rgba(160, 145, 95, 0.12) 0%,
-    rgba(55, 62, 40, 0.08) 52%,
+    rgba(54, 60, 38, 0.08) 52%,
     transparent 72%
   );
   animation-duration: 28s;
@@ -148,6 +165,26 @@ html {
   }
 }
 
+/* tsParticles full-screen layer: behind .page (z-index 1), never intercept clicks */
+.folio-leaf-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.folio-leaf-particles :deep(#folio-leaf-particles),
+.folio-leaf-particles :deep(canvas) {
+  pointer-events: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .folio-leaf-particles {
+    display: none !important;
+  }
+}
+
 html,
 body {
   margin: 0;
@@ -159,7 +196,7 @@ body {
   width: 1px;
   height: 1px;
   background-color: transparent;
-  border: 2px solid rgba(195, 218, 168, 0.72);
+  border: 2px solid rgba(188, 210, 158, 0.72);
   border-radius: 50%;
   position: fixed;
   top: 0;
@@ -167,7 +204,7 @@ body {
   pointer-events: none;
   z-index: 9999;
   box-shadow:
-    0 0 140px 38px rgba(175, 210, 140, 0.42),
+    0 0 140px 38px rgba(168, 200, 132, 0.42),
     0 0 72px 18px rgba(255, 248, 230, 0.38),
     0 0 28px 6px rgba(255, 252, 242, 0.22);
   transform: translate(-50%, -50%);
@@ -178,10 +215,10 @@ body {
 }
 
 .custom-cursor--active {
-  border-color: rgba(215, 238, 185, 0.95);
+  border-color: rgba(208, 228, 175, 0.95);
   box-shadow:
-    0 0 160px 48px rgba(185, 225, 145, 0.55),
-    0 0 88px 26px rgba(200, 230, 155, 0.45),
+    0 0 160px 48px rgba(178, 218, 138, 0.55),
+    0 0 88px 26px rgba(200, 222, 148, 0.45),
     0 0 44px 12px rgba(255, 250, 235, 0.35);
   transform: translate(-50%, -50%) scale(1.35);
 }

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leaf specimens — edit here first</title>
+    <style>
+      :root {
+        font-family: system-ui, -apple-system, sans-serif;
+        --page-bg: #1a1e16;
+        --page-fg: #e8e4d8;
+        --card: rgba(255, 255, 255, 0.04);
+        --card-border: rgba(255, 255, 255, 0.1);
+        --muted: rgba(232, 228, 216, 0.72);
+      }
+
+      html[data-bg='paper'] {
+        --page-bg: #e6e2d8;
+        --page-fg: #1c1b18;
+        --card: rgba(255, 255, 255, 0.65);
+        --card-border: rgba(0, 0, 0, 0.08);
+        --muted: rgba(28, 27, 24, 0.72);
+      }
+
+      html[data-bg='mid'] {
+        --page-bg: #2a3228;
+        --page-fg: #eef2e6;
+        --card: rgba(0, 0, 0, 0.2);
+        --card-border: rgba(255, 255, 255, 0.08);
+        --muted: rgba(238, 242, 230, 0.75);
+      }
+
+      body {
+        margin: 0;
+        padding: 1.75rem 1.25rem 3rem;
+        max-width: 80rem;
+        margin-inline: auto;
+        background: var(--page-bg);
+        color: var(--page-fg);
+        transition: background 0.25s ease, color 0.25s ease;
+      }
+
+      header {
+        margin-bottom: 1.75rem;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+        font-weight: 650;
+        margin: 0 0 0.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .lead {
+        margin: 0;
+        max-width: 44rem;
+        line-height: 1.55;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        align-items: center;
+        margin-top: 1.25rem;
+        padding: 0.65rem 0.85rem;
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 10px;
+        font-size: 0.85rem;
+      }
+
+      .toolbar span {
+        color: var(--muted);
+        margin-right: 0.25rem;
+      }
+
+      .toolbar button {
+        font: inherit;
+        cursor: pointer;
+        padding: 0.35rem 0.75rem;
+        border-radius: 8px;
+        border: 1px solid var(--card-border);
+        background: rgba(255, 255, 255, 0.06);
+        color: inherit;
+      }
+
+      html[data-bg='paper'] .toolbar button {
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      .toolbar button[aria-pressed='true'] {
+        border-color: rgba(140, 180, 100, 0.55);
+        box-shadow: 0 0 0 1px rgba(140, 180, 100, 0.25);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+        gap: 1.5rem;
+        align-items: stretch;
+      }
+
+      article {
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 14px;
+        padding: 1.1rem 1.15rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      article h2 {
+        margin: 0 0 0.2rem;
+        font-size: 1.15rem;
+      }
+
+      .meta {
+        font-family: ui-monospace, monospace;
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-bottom: 0.85rem;
+        line-height: 1.4;
+      }
+
+      .tweak-hint {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin: 0 0 0.75rem;
+        padding: 0.5rem 0.6rem;
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        line-height: 1.45;
+      }
+
+      html[data-bg='paper'] .tweak-hint {
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      .previews {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-end;
+        justify-content: center;
+        flex: 1;
+      }
+
+      .preview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .preview label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+
+      .stage {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        background: radial-gradient(ellipse 85% 75% at 50% 28%, rgba(90, 105, 72, 0.38), transparent 62%),
+          rgba(0, 0, 0, 0.12);
+      }
+
+      html[data-bg='paper'] .stage {
+        background: radial-gradient(ellipse 85% 75% at 50% 28%, rgba(120, 130, 90, 0.2), transparent 62%),
+          rgba(0, 0, 0, 0.04);
+      }
+
+      .stage--large {
+        min-width: 11.5rem;
+        min-height: 13.5rem;
+        padding: 1rem;
+      }
+
+      .stage--small {
+        min-width: 5rem;
+        min-height: 5rem;
+        padding: 0.65rem;
+      }
+
+      .stage--large svg {
+        width: min(220px, 100%);
+        height: auto;
+      }
+
+      .stage--small svg {
+        width: 34px;
+        height: auto;
+      }
+
+      .leaf-shadow {
+        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.4));
+      }
+
+      html[data-bg='paper'] .leaf-shadow {
+        filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
+      }
+
+      /* —— Elm: tune colors / strokes on #spec-elm —— */
+      #spec-elm {
+        --g0: #1a1c14;
+        --g1: #3d3f2a;
+        --g2: #5c5e38;
+        --g3: #8a8c52;
+        --g4: #c4c89a;
+        --blade-stroke: rgba(20, 22, 12, 0.52);
+        --blade-stroke-w: 0.3;
+        --rim: rgba(210, 218, 150, 0.24);
+        --rim-w: 0.24;
+        --midrib: rgba(6, 8, 3, 0.88);
+        --midrib-w: 1.05;
+        --vein: rgba(8, 10, 4, 0.78);
+        --vein-w: 0.62;
+        --vein-fine: rgba(18, 20, 10, 0.52);
+        --vein-fine-w: 0.34;
+        --stem: #5c4a34;
+        --stem-w: 2;
+        --stem-hi: rgba(130, 118, 88, 0.48);
+        --stem-hi-w: 0.7;
+      }
+
+      /* —— Maple —— */
+      #spec-maple {
+        --g0: #2a2214;
+        --g1: #5a5228;
+        --g2: #8a8238;
+        --g3: #beb45a;
+        --g4: #f0e888;
+        --blade-stroke: rgba(28, 22, 10, 0.48);
+        --blade-stroke-w: 0.32;
+        --rim: rgba(248, 232, 140, 0.28);
+        --rim-w: 0.26;
+        --vein: rgba(12, 10, 3, 0.78);
+        --vein-w: 0.44;
+        --vein-fine: rgba(28, 24, 8, 0.48);
+        --vein-fine-w: 0.24;
+        --stem: #6b5030;
+        --stem-w: 2.1;
+        --stem-hi: rgba(180, 150, 95, 0.5);
+        --stem-hi-w: 0.75;
+      }
+
+      /* —— Ash —— */
+      #spec-ash {
+        --g0: #1e2418;
+        --g1: #3d4a30;
+        --g2: #5d6e42;
+        --g3: #8fa868;
+        --g4: #d0e0b0;
+        --blade-stroke: rgba(18, 24, 14, 0.48);
+        --blade-stroke-w: 0.28;
+        --rim: rgba(220, 232, 190, 0.26);
+        --rim-w: 0.24;
+        --midrib: rgba(5, 10, 3, 0.82);
+        --midrib-w: 0.74;
+        --vein: rgba(6, 12, 4, 0.64);
+        --vein-w: 0.38;
+        --vein-fine: rgba(16, 22, 10, 0.4);
+        --vein-fine-w: 0.2;
+        --stem: #5a4834;
+        --stem-w: 1.75;
+        --stem-hi: rgba(130, 125, 95, 0.45);
+        --stem-hi-w: 0.65;
+      }
+
+      #spec-elm .blade,
+      #spec-maple .blade,
+      #spec-ash .blade {
+        stroke: var(--blade-stroke);
+        stroke-width: var(--blade-stroke-w);
+      }
+
+      #spec-elm .rim,
+      #spec-maple .rim,
+      #spec-ash .rim {
+        stroke: var(--rim);
+        stroke-width: var(--rim-w);
+      }
+
+      #spec-elm .midrib,
+      #spec-ash .midrib {
+        stroke: var(--midrib);
+        stroke-width: var(--midrib-w);
+      }
+
+      #spec-elm .vein,
+      #spec-maple .vein,
+      #spec-ash .vein {
+        stroke: var(--vein);
+        stroke-width: var(--vein-w);
+      }
+
+      #spec-elm .vein-fine,
+      #spec-maple .vein-fine,
+      #spec-ash .vein-fine {
+        stroke: var(--vein-fine);
+        stroke-width: var(--vein-fine-w);
+      }
+
+      #spec-elm .stem,
+      #spec-maple .stem,
+      #spec-ash .stem {
+        stroke: var(--stem);
+        stroke-width: var(--stem-w);
+      }
+
+      #spec-elm .stem-hi,
+      #spec-maple .stem-hi,
+      #spec-ash .stem-hi {
+        stroke: var(--stem-hi);
+        stroke-width: var(--stem-hi-w);
+      }
+
+      footer {
+        margin-top: 2.25rem;
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      footer code {
+        font-size: 0.78em;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Leaf specimens</h1>
+      <p class="lead">
+        Edit only this file until you are happy with <strong>Elm</strong>, <strong>Maple</strong>, and <strong>Ash</strong>. Adjust the
+        <strong>CSS variables</strong> on each <code>article#spec-…</code> for colors and vein weight; change <strong>path <code>d</code></strong>
+        attributes for shape. Then we copy the winning SVG + variables into <code>App.vue</code>.
+      </p>
+      <div class="toolbar" role="group" aria-label="Preview background">
+        <span>Background</span>
+        <button type="button" data-bg="dark" aria-pressed="true">Portfolio dark</button>
+        <button type="button" data-bg="mid">Muted green</button>
+        <button type="button" data-bg="paper">Paper</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- —— ELM (variant 0) —— -->
+      <article id="spec-elm">
+        <h2>Elm</h2>
+        <p class="meta">variant 0 · viewBox 0 0 66 78 · symmetric about x = 33 · blade, rim, midrib, veins, stem</p>
+        <p class="tweak-hint">
+          Knobs: <code>--g0…--g4</code> gradient, <code>--vein</code> / <code>--vein-fine</code>, <code>--midrib</code>, <code>--rim</code>,
+          <code>--blade-stroke</code>. If you change a <code>path d</code>, update <strong>both</strong> previews (site + edit).
+        </p>
+        <div class="previews">
+          <div class="preview">
+            <label>Site scale</label>
+            <div class="stage stage--small">
+              <svg
+                class="leaf-shadow"
+                viewBox="0 0 66 78"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <defs>
+                  <linearGradient id="spec-elm-blade" x1="12%" y1="100%" x2="78%" y2="5%">
+                    <stop offset="0%" stop-color="var(--g0)" />
+                    <stop offset="26%" stop-color="var(--g1)" />
+                    <stop offset="48%" stop-color="var(--g2)" />
+                    <stop offset="70%" stop-color="var(--g3)" />
+                    <stop offset="100%" stop-color="var(--g4)" stop-opacity="0.97" />
+                  </linearGradient>
+                </defs>
+                <g class="spec-svg-inner">
+                  <path
+                    class="blade"
+                    fill="url(#spec-elm-blade)"
+                    stroke-linejoin="round"
+                    d="M 33 2
+                      L 35.5 4.8 L 34.2 7.2 L 38 11 L 35.5 13.5 L 39.8 18 L 36.8 20.8 L 41.2 26.5 L 38.2 29.2 L 42.5 35 L 39.5 37.8 L 43.8 44 L 40.8 46.8 L 44.5 53.2 L 41.5 55.8 L 45 62 L 41 65.5 L 37.2 68.8 L 33 70.2
+                      L 28.8 68.8 L 25 65.5 L 21 62 L 24.5 55.8 L 21.5 53.2 L 25.2 46.8 L 22.2 44 L 26.5 37.8 L 23.5 35 L 27.8 29.2 L 24.8 26.5 L 29.2 20.8 L 26.2 18 L 30.5 13.5 L 28 11 L 31.8 7.2 L 30.5 4.8 Z"
+                  />
+                  <path
+                    class="rim"
+                    fill="none"
+                    stroke-linecap="round"
+                    d="M 33 3.2
+                      L 35.2 5.5 L 34.1 7.6 L 37.6 11.2 L 35.2 13.6 L 39.2 17.8 L 36.5 20.4 L 40.5 26 L 38 28.6 L 41.8 34.5 L 39 37.2 L 42.8 43.2 L 40.2 45.8 L 43.8 52.2 L 41.2 54.8 L 44.2 61 L 40.6 64 L 36.5 68 L 33 69.4
+                      L 29.5 68 L 25.4 64 L 21.8 61 L 24.8 54.8 L 22.2 52.2 L 25.2 45.8 L 22.5 43.2 L 26.2 37.2 L 23.5 34.5 L 27.2 28.6 L 24.5 26 L 28.5 20.4 L 25.8 17.8 L 29.8 13.6 L 27.4 11.2 L 30.9 7.6 L 29.8 5.5 Z"
+                  />
+                  <path class="midrib" fill="none" stroke-linecap="round" d="M 33 4 L 33 69.5" />
+                  <g class="vein" fill="none" stroke-linecap="round">
+                    <path d="M 33 12 Q 25 17 15 23 M 33 12 Q 41 17 51 23" />
+                    <path d="M 33 18 Q 24 24 12 30 M 33 18 Q 42 24 54 30" />
+                    <path d="M 33 25 Q 23 31 10 38 M 33 25 Q 43 31 56 38" />
+                    <path d="M 33 32 Q 22 39 9 46 M 33 32 Q 44 39 57 46" />
+                    <path d="M 33 39 Q 22 47 9 55 M 33 39 Q 44 47 57 55" />
+                    <path d="M 33 46 Q 21 54 10 62 M 33 46 Q 45 54 56 62" />
+                    <path d="M 33 52 Q 23 60 14 67 M 33 52 Q 43 60 52 67" />
+                  </g>
+                  <g class="vein-fine" fill="none" stroke-linecap="round">
+                    <path d="M 33 15 L 26 19 M 33 15 L 40 19" />
+                    <path d="M 33 22 L 25 27 M 33 22 L 41 27" />
+                    <path d="M 33 30 L 23 35 M 33 30 L 43 35" />
+                    <path d="M 33 38 L 22 43 M 33 38 L 44 43" />
+                  </g>
+                  <path class="stem" fill="none" stroke-linecap="round" d="M 33 70.2 L 33 77" />
+                  <path class="stem-hi" fill="none" stroke-linecap="round" d="M 33.35 70.5 L 33 76" />
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="preview">
+            <label>Edit scale</label>
+            <div class="stage stage--large">
+              <svg
+                class="leaf-shadow"
+                viewBox="0 0 66 78"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="Elm leaf"
+              >
+                <defs>
+                  <linearGradient id="spec-elm-blade-lg" x1="12%" y1="100%" x2="78%" y2="5%">
+                    <stop offset="0%" stop-color="var(--g0)" />
+                    <stop offset="26%" stop-color="var(--g1)" />
+                    <stop offset="48%" stop-color="var(--g2)" />
+                    <stop offset="70%" stop-color="var(--g3)" />
+                    <stop offset="100%" stop-color="var(--g4)" stop-opacity="0.97" />
+                  </linearGradient>
+                </defs>
+                <g>
+                  <path
+                    class="blade"
+                    fill="url(#spec-elm-blade-lg)"
+                    stroke-linejoin="round"
+                    d="M 33 2
+                      L 35.5 4.8 L 34.2 7.2 L 38 11 L 35.5 13.5 L 39.8 18 L 36.8 20.8 L 41.2 26.5 L 38.2 29.2 L 42.5 35 L 39.5 37.8 L 43.8 44 L 40.8 46.8 L 44.5 53.2 L 41.5 55.8 L 45 62 L 41 65.5 L 37.2 68.8 L 33 70.2
+                      L 28.8 68.8 L 25 65.5 L 21 62 L 24.5 55.8 L 21.5 53.2 L 25.2 46.8 L 22.2 44 L 26.5 37.8 L 23.5 35 L 27.8 29.2 L 24.8 26.5 L 29.2 20.8 L 26.2 18 L 30.5 13.5 L 28 11 L 31.8 7.2 L 30.5 4.8 Z"
+                  />
+                  <path
+                    class="rim"
+                    fill="none"
+                    stroke-linecap="round"
+                    d="M 33 3.2
+                      L 35.2 5.5 L 34.1 7.6 L 37.6 11.2 L 35.2 13.6 L 39.2 17.8 L 36.5 20.4 L 40.5 26 L 38 28.6 L 41.8 34.5 L 39 37.2 L 42.8 43.2 L 40.2 45.8 L 43.8 52.2 L 41.2 54.8 L 44.2 61 L 40.6 64 L 36.5 68 L 33 69.4
+                      L 29.5 68 L 25.4 64 L 21.8 61 L 24.8 54.8 L 22.2 52.2 L 25.2 45.8 L 22.5 43.2 L 26.2 37.2 L 23.5 34.5 L 27.2 28.6 L 24.5 26 L 28.5 20.4 L 25.8 17.8 L 29.8 13.6 L 27.4 11.2 L 30.9 7.6 L 29.8 5.5 Z"
+                  />
+                  <path class="midrib" fill="none" stroke-linecap="round" d="M 33 4 L 33 69.5" />
+                  <g class="vein" fill="none" stroke-linecap="round">
+                    <path d="M 33 12 Q 25 17 15 23 M 33 12 Q 41 17 51 23" />
+                    <path d="M 33 18 Q 24 24 12 30 M 33 18 Q 42 24 54 30" />
+                    <path d="M 33 25 Q 23 31 10 38 M 33 25 Q 43 31 56 38" />
+                    <path d="M 33 32 Q 22 39 9 46 M 33 32 Q 44 39 57 46" />
+                    <path d="M 33 39 Q 22 47 9 55 M 33 39 Q 44 47 57 55" />
+                    <path d="M 33 46 Q 21 54 10 62 M 33 46 Q 45 54 56 62" />
+                    <path d="M 33 52 Q 23 60 14 67 M 33 52 Q 43 60 52 67" />
+                  </g>
+                  <g class="vein-fine" fill="none" stroke-linecap="round">
+                    <path d="M 33 15 L 26 19 M 33 15 L 40 19" />
+                    <path d="M 33 22 L 25 27 M 33 22 L 41 27" />
+                    <path d="M 33 30 L 23 35 M 33 30 L 43 35" />
+                    <path d="M 33 38 L 22 43 M 33 38 L 44 43" />
+                  </g>
+                  <path class="stem" fill="none" stroke-linecap="round" d="M 33 70.2 L 33 77" />
+                  <path class="stem-hi" fill="none" stroke-linecap="round" d="M 33.35 70.5 L 33 76" />
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- —— MAPLE (variant 1) —— Specimen: smoother 5-lobe blade than strict polygon —— -->
+      <article id="spec-maple">
+        <h2>Maple</h2>
+        <p class="meta">variant 1 · viewBox 0 0 64 72 · palmate veins</p>
+        <p class="tweak-hint">
+          Blade uses curves for a softer 5-lobe silhouette (differs from live site until you approve). Knobs: <code>--vein</code>,
+          <code>--vein-fine</code>, <code>--rim</code>, <code>--g0…--g4</code>. Sync path edits across <strong>both</strong> Maple SVGs.
+        </p>
+        <div class="previews">
+          <div class="preview">
+            <label>Site scale</label>
+            <div class="stage stage--small">
+              <svg class="leaf-shadow" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="spec-maple-blade" x1="25%" y1="95%" x2="70%" y2="8%">
+                    <stop offset="0%" stop-color="var(--g0)" />
+                    <stop offset="22%" stop-color="var(--g1)" />
+                    <stop offset="45%" stop-color="var(--g2)" />
+                    <stop offset="68%" stop-color="var(--g3)" />
+                    <stop offset="100%" stop-color="var(--g4)" stop-opacity="0.98" />
+                  </linearGradient>
+                </defs>
+                <g>
+                  <path
+                    class="blade"
+                    fill="url(#spec-maple-blade)"
+                    stroke-linejoin="round"
+                    d="M 32 1.2
+                      C 23 2.5 12 11 9.5 23.5 C 7.5 31 9.2 40 15.5 46.5
+                      L 22 51 L 28.5 44 L 31 30 L 32 24.5 L 33 30 L 35.5 44 L 42 51 L 48.5 46.5
+                      C 54.8 40 56.5 31 54.5 23.5 C 52 11 41 2.5 32 1.2 Z"
+                  />
+                  <path
+                    class="rim"
+                    fill="none"
+                    stroke-linecap="round"
+                    d="M 32 2.2 C 24 3.5 14.5 12 12 23 C 10 30 11.5 39 17 45 L 23 49.5 L 29 43 L 31.2 31 L 32 26 L 32.8 31 L 35 43 L 41 49.5 L 47 45 C 52.5 39 54 30 52 23 C 49.5 12 40 3.5 32 2.2"
+                  />
+                  <g class="vein" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M 32 57 L 32 28.5" />
+                    <path d="M 32 57 Q 19 40 8.5 22" />
+                    <path d="M 32 57 Q 26 38 18.5 11" />
+                    <path d="M 32 57 Q 38 38 45.5 11" />
+                    <path d="M 32 57 Q 45 40 55.5 22" />
+                    <path d="M 32 28.5 Q 17 22 8.5 17" />
+                    <path d="M 32 28.5 Q 47 22 55.5 17" />
+                    <path d="M 32 28.5 Q 23.5 15 22.5 4.5" />
+                    <path d="M 32 28.5 Q 40.5 15 41.5 4.5" />
+                  </g>
+                  <g class="vein-fine" fill="none" stroke-linecap="round">
+                    <path d="M 27 43 L 17 35 M 37 43 L 47 35" />
+                    <path d="M 26 49 L 15 45 M 38 49 L 49 45" />
+                    <path d="M 25 34 L 16 27 M 39 34 L 48 27" />
+                    <path d="M 28 22 L 23.5 10 M 36 22 L 40.5 10" />
+                  </g>
+                  <path class="stem" fill="none" stroke-linecap="round" d="M 32 57 L 31.5 66" />
+                  <path class="stem-hi" fill="none" stroke-linecap="round" d="M 32.55 57.4 L 32.1 64.5" />
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="preview">
+            <label>Edit scale</label>
+            <div class="stage stage--large">
+              <svg class="leaf-shadow" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg" aria-label="Maple leaf">
+                <defs>
+                  <linearGradient id="spec-maple-blade-lg" x1="25%" y1="95%" x2="70%" y2="8%">
+                    <stop offset="0%" stop-color="var(--g0)" />
+                    <stop offset="22%" stop-color="var(--g1)" />
+                    <stop offset="45%" stop-color="var(--g2)" />
+                    <stop offset="68%" stop-color="var(--g3)" />
+                    <stop offset="100%" stop-color="var(--g4)" stop-opacity="0.98" />
+                  </linearGradient>
+                </defs>
+                <g>
+                  <path
+                    class="blade"
+                    fill="url(#spec-maple-blade-lg)"
+                    stroke-linejoin="round"
+                    d="M 32 1.2
+                      C 23 2.5 12 11 9.5 23.5 C 7.5 31 9.2 40 15.5 46.5
+                      L 22 51 L 28.5 44 L 31 30 L 32 24.5 L 33 30 L 35.5 44 L 42 51 L 48.5 46.5
+                      C 54.8 40 56.5 31 54.5 23.5 C 52 11 41 2.5 32 1.2 Z"
+                  />
+                  <path
+                    class="rim"
+                    fill="none"
+                    stroke-linecap="round"
+                    d="M 32 2.2 C 24 3.5 14.5 12 12 23 C 10 30 11.5 39 17 45 L 23 49.5 L 29 43 L 31.2 31 L 32 26 L 32.8 31 L 35 43 L 41 49.5 L 47 45 C 52.5 39 54 30 52 23 C 49.5 12 40 3.5 32 2.2"
+                  />
+                  <g class="vein" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M 32 57 L 32 28.5" />
+                    <path d="M 32 57 Q 19 40 8.5 22" />
+                    <path d="M 32 57 Q 26 38 18.5 11" />
+                    <path d="M 32 57 Q 38 38 45.5 11" />
+                    <path d="M 32 57 Q 45 40 55.5 22" />
+                    <path d="M 32 28.5 Q 17 22 8.5 17" />
+                    <path d="M 32 28.5 Q 47 22 55.5 17" />
+                    <path d="M 32 28.5 Q 23.5 15 22.5 4.5" />
+                    <path d="M 32 28.5 Q 40.5 15 41.5 4.5" />
+                  </g>
+                  <g class="vein-fine" fill="none" stroke-linecap="round">
+                    <path d="M 27 43 L 17 35 M 37 43 L 47 35" />
+                    <path d="M 26 49 L 15 45 M 38 49 L 49 45" />
+                    <path d="M 25 34 L 16 27 M 39 34 L 48 27" />
+                    <path d="M 28 22 L 23.5 10 M 36 22 L 40.5 10" />
+                  </g>
+                  <path class="stem" fill="none" stroke-linecap="round" d="M 32 57 L 31.5 66" />
+                  <path class="stem-hi" fill="none" stroke-linecap="round" d="M 32.55 57.4 L 32.1 64.5" />
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- —— ASH (variant 2) —— -->
+      <article id="spec-ash">
+        <h2>Ash</h2>
+        <p class="meta">variant 2 · viewBox 0 0 54 70 · single leaflet</p>
+        <p class="tweak-hint">
+          Knobs: <code>--g0…--g4</code>, <code>--vein</code> / <code>--vein-fine</code>, <code>--midrib</code>. Shape: one closed <code>path</code> + rim.
+          Sync path edits across <strong>both</strong> Ash SVGs.
+        </p>
+        <div class="previews">
+          <div class="preview">
+            <label>Site scale</label>
+            <div class="stage stage--small">
+              <svg class="leaf-shadow" viewBox="0 0 54 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="spec-ash-blade" x1="18%" y1="100%" x2="65%" y2="4%">
+                    <stop offset="0%" stop-color="var(--g0)" />
+                    <stop offset="30%" stop-color="var(--g1)" />
+                    <stop offset="52%" stop-color="var(--g2)" />
+                    <stop offset="74%" stop-color="var(--g3)" />
+                    <stop offset="100%" stop-color="var(--g4)" stop-opacity="0.98" />
+                  </linearGradient>
+                </defs>
+                <g>
+                  <path
+                    class="blade"
+                    fill="url(#spec-ash-blade)"
+                    stroke-linejoin="round"
+                    d="M 27 7 C 38 8 46 22 46 34 C 46 48 38 60 27 62.5 C 16 60 8 48 8 34 C 8 22 16 8 27 7 Z"
+                  />
+                  <path
+                    class="rim"
+                    fill="none"
+                    stroke-linecap="round"
+                    d="M 27 8.5 C 37 9.5 44.5 23 44.5 34 C 44.5 47 37 58.5 27 60.5 C 17 58.5 9.5 47 9.5 34 C 9.5 23 17 9.5 27 8.5"
+                  />
+                  <path class="midrib" fill="none" stroke-linecap="round" d="M 27 10 L 27 60" />
+                  <g class="vein" fill="none" stroke-linecap="round">
+                    <path d="M 27 14 L 14 19.5 M 27 14 L 40 19.5" />
+                    <path d="M 27 18 L 12.5 24.5 M 27 18 L 41.5 24.5" />
+                    <path d="M 27 22 L 11.5 29.5 M 27 22 L 42.5 29.5" />
+                    <path d="M 27 26 L 10.5 34.5 M 27 26 L 43.5 34.5" />
+                    <path d="M 27 30 L 10 39.5 M 27 30 L 44 39.5" />
+                    <path d="M 27 34 L 10 44.5 M 27 34 L 44 44.5" />
+                    <path d="M 27 38 L 10.5 49.5 M 27 38 L 43.5 49.5" />
+                    <path d="M 27 42 L 11.5 54 M 27 42 L 42.5 54" />
+                    <path d="M 27 46 L 13 57.5 M 27 46 L 41 57.5" />
+                    <path d="M 27 50 L 15.5 59.5 M 27 50 L 38.5 59.5" />
+                  </g>
+                  <g class="vein-fine" fill="none" stroke-linecap="round">
+                    <path d="M 24.5 16 L 19 18 M 29.5 16 L 35 18" />
+                    <path d="M 23.5 21 L 16.5 24 M 30.5 21 L 37.5 24" />
+                    <path d="M 22.5 27 L 15 30.5 M 31.5 27 L 39 30.5" />
+                    <path d="M 22 33 L 14 37 M 32 33 L 40 37" />
+                    <path d="M 21.5 39 L 13.5 43.5 M 32.5 39 L 40.5 43.5" />
+                    <path d="M 21.5 45 L 13.5 50 M 32.5 45 L 40.5 50" />
+                    <path d="M 22 51 L 15 55.5 M 32 51 L 39 55.5" />
+                  </g>
+                  <path class="stem" fill="none" stroke-linecap="round" d="M 27 62 L 26.6 68.5" />
+                  <path class="stem-hi" fill="none" stroke-linecap="round" d="M 27.5 62.3 L 27.1 67.5" />
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="preview">
+            <label>Edit scale</label>
+            <div class="stage stage--large">
+              <svg class="leaf-shadow" viewBox="0 0 54 70" xmlns="http://www.w3.org/2000/svg" aria-label="Ash leaflet">
+                <defs>
+                  <linearGradient id="spec-ash-blade-lg" x1="18%" y1="100%" x2="65%" y2="4%">
+                    <stop offset="0%" stop-color="var(--g0)" />
+                    <stop offset="30%" stop-color="var(--g1)" />
+                    <stop offset="52%" stop-color="var(--g2)" />
+                    <stop offset="74%" stop-color="var(--g3)" />
+                    <stop offset="100%" stop-color="var(--g4)" stop-opacity="0.98" />
+                  </linearGradient>
+                </defs>
+                <g>
+                  <path
+                    class="blade"
+                    fill="url(#spec-ash-blade-lg)"
+                    stroke-linejoin="round"
+                    d="M 27 7 C 38 8 46 22 46 34 C 46 48 38 60 27 62.5 C 16 60 8 48 8 34 C 8 22 16 8 27 7 Z"
+                  />
+                  <path
+                    class="rim"
+                    fill="none"
+                    stroke-linecap="round"
+                    d="M 27 8.5 C 37 9.5 44.5 23 44.5 34 C 44.5 47 37 58.5 27 60.5 C 17 58.5 9.5 47 9.5 34 C 9.5 23 17 9.5 27 8.5"
+                  />
+                  <path class="midrib" fill="none" stroke-linecap="round" d="M 27 10 L 27 60" />
+                  <g class="vein" fill="none" stroke-linecap="round">
+                    <path d="M 27 14 L 14 19.5 M 27 14 L 40 19.5" />
+                    <path d="M 27 18 L 12.5 24.5 M 27 18 L 41.5 24.5" />
+                    <path d="M 27 22 L 11.5 29.5 M 27 22 L 42.5 29.5" />
+                    <path d="M 27 26 L 10.5 34.5 M 27 26 L 43.5 34.5" />
+                    <path d="M 27 30 L 10 39.5 M 27 30 L 44 39.5" />
+                    <path d="M 27 34 L 10 44.5 M 27 34 L 44 44.5" />
+                    <path d="M 27 38 L 10.5 49.5 M 27 38 L 43.5 49.5" />
+                    <path d="M 27 42 L 11.5 54 M 27 42 L 42.5 54" />
+                    <path d="M 27 46 L 13 57.5 M 27 46 L 41 57.5" />
+                    <path d="M 27 50 L 15.5 59.5 M 27 50 L 38.5 59.5" />
+                  </g>
+                  <g class="vein-fine" fill="none" stroke-linecap="round">
+                    <path d="M 24.5 16 L 19 18 M 29.5 16 L 35 18" />
+                    <path d="M 23.5 21 L 16.5 24 M 30.5 21 L 37.5 24" />
+                    <path d="M 22.5 27 L 15 30.5 M 31.5 27 L 39 30.5" />
+                    <path d="M 22 33 L 14 37 M 32 33 L 40 37" />
+                    <path d="M 21.5 39 L 13.5 43.5 M 32.5 39 L 40.5 43.5" />
+                    <path d="M 21.5 45 L 13.5 50 M 32.5 45 L 40.5 50" />
+                    <path d="M 22 51 L 15 55.5 M 32 51 L 39 55.5" />
+                  </g>
+                  <path class="stem" fill="none" stroke-linecap="round" d="M 27 62 L 26.6 68.5" />
+                  <path class="stem-hi" fill="none" stroke-linecap="round" d="M 27.5 62.3 L 27.1 67.5" />
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <footer>
+      Dev server: <code>/leaf-specimens.html</code> · Source: <code>public/leaf-specimens.html</code>
+    </footer>
+
+    <script>
+      const root = document.documentElement;
+      document.querySelectorAll('.toolbar button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const bg = btn.getAttribute('data-bg');
+          root.setAttribute('data-bg', bg);
+          document.querySelectorAll('.toolbar button').forEach((b) => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+        });
+      });
+    </script>
+  </body>
+</html>
